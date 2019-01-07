@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_refresh/flutter_refresh.dart';
 
 //有状态的widget
   class News extends StatefulWidget{
@@ -12,10 +13,12 @@ import 'package:http/http.dart' as http;
   }
 
 
-  class _NewRoute extends State<News>{
+  class _NewRoute extends State<News> with AutomaticKeepAliveClientMixin{
     int count;
     String type;
     List<dynamic> newsArray = [];
+    ScrollController _scrollController = new ScrollController();
+
 
     _NewRoute({this.type});
 
@@ -47,6 +50,12 @@ import 'package:http/http.dart' as http;
     Widget build(BuildContext context) {
       return _renderItem();
     }
+
+    @override
+    // TODO: implement wantKeepAlive
+    bool get wantKeepAlive => true;
+
+
 
     Widget _buildItem( dynamic newsItem){
 //              print(newsItem['picInfo'][0]['url']);
@@ -96,27 +105,67 @@ import 'package:http/http.dart' as http;
 
     }
 
-    Future<List> getNews() async {
+     getNews() async {
       String url ='https://www.apiopen.top/journalismApi';
-      http.Response response = await http.get(url);
-      var result = json.decode(response.body);
-//          print(newsToJson['data']['tech'].runtimeType);
-      if(this.mounted){
-        this.setState((){
-          newsArray.addAll(result['data'][type]);
-        });
+
+      try{
+        http.Response response = await http.get(url);
+        var result = json.decode(response.body);
+        print(result);
+        if(this.mounted){
+          this.setState((){
+            newsArray = result['data'][type];
+          });
+        }
+      }catch(e){
+        print('服务端错误');
       }
+
+
 
     }
 
+    //下拉刷新加载
+    Future<Null> onHeaderRefresh(){
+      return new Future.delayed(Duration(seconds: 2),(){
+        setState(() {
+          getNews();
+        });
+
+      });
+    }
+
+    Future<Null> _loadRefresh(){
+        return Future.delayed(Duration(seconds: 2),(){
+          setState(() {
+            getNews();
+          });
+        });
+    }
+
+
+
     Widget _renderItem(){
       if(newsArray.length!= 0){
-        return ListView.builder(
-            itemCount: newsArray.length,
-            itemBuilder: (BuildContext context ,int index){
-              return _buildItem(newsArray[index]);
-            }
+//        return RefreshIndicator(
+//            child: ListView.builder(
+//                itemCount: newsArray.length,
+//                itemBuilder: (BuildContext context ,int index){
+//                return _buildItem(newsArray[index]);
+//            }
+//          ),
+//            onRefresh: _loadRefresh //刷新回掉
+//        );
+        return Refresh(
+          onHeaderRefresh: onHeaderRefresh,
+          child: ListView.builder(
+              itemCount: newsArray.length,
+              itemBuilder: (BuildContext context ,int index){
+                return _buildItem(newsArray[index]);
+              }
+          ) ,
         );
+
       }else{
         return Center(
           child: CircularProgressIndicator(),

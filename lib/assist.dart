@@ -11,9 +11,11 @@ class AssistPage extends StatefulWidget {
   }
 }
 
-class _MyHomeAppState extends State<AssistPage> {
+class _MyHomeAppState extends State<AssistPage>{
   List subjects = [];
   String title = '';
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class _MyHomeAppState extends State<AssistPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        centerTitle: true,
       ),
       body: Center(
         child:getBody(),

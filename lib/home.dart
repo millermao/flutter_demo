@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
   }
 
+
   @override
   void dispose() {
     super.dispose();
@@ -75,6 +76,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         appBar: AppBar(
           leading: IconButton(icon: Icon(Icons.menu), onPressed: null),
           title: Text('首页'),
+          centerTitle: true,
           actions: <Widget>[
             IconButton(
                 icon:Icon(Icons.add_alert),
