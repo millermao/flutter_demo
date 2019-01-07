@@ -161,7 +161,7 @@ class _LoginPage extends State<MinePage> {
                   child: TextField(
                     obscureText: true,
                     decoration: InputDecoration(
-                        hintText: '请输入密码'
+                        hintText: '请密码'
                     ),
                   )
               )
