@@ -56,9 +56,16 @@ class _LoginPage extends State<MinePage> {
   }
 
   arrangeWidth(){
+
     var screenWidth = window.physicalSize.width/window.devicePixelRatio;
     return (screenWidth-3*10)/4;
 //  return 100.0;
+
+  }
+
+  //登陆按钮
+  void _login(){
+    print('正在登陆');
 
   }
 
@@ -161,7 +168,7 @@ class _LoginPage extends State<MinePage> {
                   child: TextField(
                     obscureText: true,
                     decoration: InputDecoration(
-                        hintText: '请密码'
+                        hintText: '请输入密码'
                     ),
                   )
               )
@@ -174,7 +181,7 @@ class _LoginPage extends State<MinePage> {
                 margin: EdgeInsets.only(top:20.0),
                 child:RaisedButton(
                   onPressed: (){
-
+                    _login();
                   },
                   child: Text('登陆'),
                 ),

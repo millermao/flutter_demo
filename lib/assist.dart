@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
+import 'moviesdes.dart';
 
 class AssistPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _MyHomeAppState();
   }
+}
+enum Animal{
+  cat,dog
 }
 
 class _MyHomeAppState extends State<AssistPage>{
@@ -34,6 +38,8 @@ class _MyHomeAppState extends State<AssistPage>{
   @override
   void initState() {
     loadData();
+    print(Animal.dog);
+
   }
 
 
@@ -63,8 +69,6 @@ class _MyHomeAppState extends State<AssistPage>{
                   radius: 15,
                 )
             )
-
-,
     );
     var row = Container(
       margin: EdgeInsets.all(4.0),
@@ -128,7 +132,16 @@ class _MyHomeAppState extends State<AssistPage>{
       ),
     );
     return Card(
-      child: row,
+      child: InkWell(
+        onTap: (){
+          Navigator.push(context,
+            new MaterialPageRoute(
+              builder: (context)=>new Moviedes(id:subject['id'],title: subject['title'])
+          )
+          );
+        },
+        child:row,
+      ),
     );
   }
 
