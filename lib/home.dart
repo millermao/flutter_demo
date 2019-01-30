@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'dart:async';
+
 import 'news.dart';
+import 'eventBus.dart';
 
 class HomePage extends StatefulWidget{
 
@@ -9,6 +13,7 @@ class HomePage extends StatefulWidget{
 
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
+  String barcode = "";
 
   static dynamic myTabDataSources = [
     {
@@ -59,6 +64,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     _tabController=new TabController(length: myTabs.length, vsync: this);
     super.initState();
+
   }
 
 
@@ -73,21 +79,58 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
 
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.menu), onPressed: null),
-          title: Text('首页'),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-                icon:Icon(Icons.add_alert),
-                tooltip: '客服'
-            )
-          ],
+        appBar: new AppBar(
+            elevation:0,
+            leading: IconButton(icon: Icon(Icons.menu), onPressed: (){
+              Scaffold.of(context).openDrawer();
+            }),
+            title: Container(
+              decoration: BoxDecoration(
+                color:Colors.white,
+                borderRadius: BorderRadius.circular(15)
+              ),
+              height: 30,
+              padding: EdgeInsets.only(left: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                  ),
+                  Text(
+                      '搜索要闻',
+                      style: TextStyle(
+                        color:Colors.grey,
+                        fontSize: 14
+                      ),
+                  )
+                ],),
+            ),
+            actions: <Widget>[
+              InkWell(
+                  onTap:scan,
+                  child:Column(children: <Widget>[
+                  Expanded(child: IconButton(icon: Icon(Icons.scanner,color: Colors.white,), onPressed: null)),
+                  Expanded(child: Text(
+                  '扫码',
+                  style: TextStyle(
+                      fontSize: 13
+                  ),
+                ),)
+              ],
+              )
+              )
+
+            ],
+          centerTitle: false,
+          titleSpacing:0,
           bottom: TabBar(
             isScrollable: true,
             tabs: myTabs,
             controller: _tabController,
-          ),
+          )
         ),
         body:
         TabBarView(
@@ -131,23 +174,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-//  Widget _typeStack (){
-//    return Stack(
-//      alignment: const FractionalOffset(.2, .5),
-//      children: <Widget>[
-//        CircleAvatar(
-//          backgroundImage: NetworkImage('http://img5.mtime.cn/mt/2018/10/22/104316.77318635_180X260X4.jpg'),
-//          radius: 100.0,
-//        ),
-//        GestureDetector(
-//          onTap: (){
-//            print('分享一下');
-//          },
-//          child: Icon(Icons.share,color: Colors.red),
-//        )
-//      ],
-//    );
-//  }
+
+  Future scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() => this.barcode = barcode);
+    } catch (e) {
+      setState(() => this.barcode = 'Unknown error: $e');
+    }
+  }
 
 }
 

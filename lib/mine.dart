@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'dart:ui';
 import 'dart:io';
 import 'dart:async';
+import 'eventBus.dart';
 
 class MinePage extends StatefulWidget{
   @override
@@ -15,6 +17,15 @@ class _LoginPage extends State<MinePage> {
 
   String _verifyStr = '获取验证码';
 
+  StreamSubscription subscription;
+
+  var subject = new BehaviorSubject<String>();
+
+
+ //触发事件
+  void _fireB(){
+    eventBus.fire(new MyEvent('我是个人中心'));
+  }
 
   //启动倒计时
   void _startTimer(){
@@ -51,7 +62,26 @@ class _LoginPage extends State<MinePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(arrangeWidth());
+//    print(arrangeWidth());
+
+//    subject.add("Item1");
+
+     eventBus.on<MyEvent>().listen((MyEvent data){
+      print('${data.text}');
+    });
+
+    subject.listen((item) => print("$item 第1个"));
+
+    subject.add("Item1");
+    subject.add("Item2");
+    subject.add("Item3");
+    subject.add("Item4");
+
+    subject.listen((item) => print("$item 第2个"));
+
+    subject.add("Item5");
+    subject.add("Item6");
+    subject.close();
 
   }
 
@@ -99,6 +129,7 @@ class _LoginPage extends State<MinePage> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        elevation:0,
         title: Text('个人中心'),
         centerTitle: true,
       ),
@@ -181,7 +212,8 @@ class _LoginPage extends State<MinePage> {
                 margin: EdgeInsets.only(top:20.0),
                 child:RaisedButton(
                   onPressed: (){
-                    _login();
+                    _fireB();
+
                   },
                   child: Text('登陆'),
                 ),

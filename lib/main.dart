@@ -2,40 +2,23 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'assist.dart';
 import 'mine.dart';
+import 'package:event_bus/event_bus.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '云',
-      theme: ThemeData(
-        //应用的主题，蓝色主题
-        primarySwatch: Colors.blue,
-      ),
-      //应用首页
-      home: MyHomePage(title: '首页'),
-      routes: {
-
-      },
-    );
-  }
+void main() {
+  runApp(MyApp());
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class MyApp extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<StatefulWidget> createState() => new MyHomePageState();
+
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyApp> {
   int _currentIndex = 0;
   List<Widget> pages = List();
+
+  EventBus eventBus = new EventBus();
 
   @override
   void initState() {
@@ -46,8 +29,24 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '娱乐细纹',
+      theme: ThemeData(
+        //应用的主题，蓝色主题
+          primarySwatch:Colors.blue
+      ),
+      //应用首页
+      home: myHome(),
+      routes: {
+      },
+    );
+  }
+
+
+  Widget myHome() {
     return Scaffold(
       body:pages.elementAt(_currentIndex),
       bottomNavigationBar: BottomNavigationBar(items: [
@@ -66,8 +65,21 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {
             _currentIndex=index;
           });
-        }
+        },
       ),
+        drawer: new Drawer(
+          child:ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+                DrawerHeader(
+                    decoration: BoxDecoration(
+                      color:Colors.yellow
+                    ),
+                    child: null
+                )
+            ],
+          ),
+        )
     );
   }
 }

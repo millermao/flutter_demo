@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_refresh/flutter_refresh.dart';
+import 'commonWebPage.dart';
 
 //有状态的widget
   class News extends StatefulWidget{
@@ -59,49 +60,60 @@ import 'package:flutter_refresh/flutter_refresh.dart';
 
     Widget _buildItem( dynamic newsItem){
 //              print(newsItem['picInfo'][0]['url']);
-              return Card(
-                child:Container(
-                  child:Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: Container(
-                          padding: EdgeInsets.only(left: 5.0,right: 5.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(newsItem['title']),
-                              Container(
-                                margin: EdgeInsets.only(top: 15.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(child: Text(
-                                      "来源：${newsItem['source']}",
-                                      style: TextStyle(
-                                          color: Colors.deepOrange
-                                      ),
-                                    ),)
+              return InkWell(
+                onTap: (){
+                  Navigator.push(context, new MaterialPageRoute(builder: (context)=>new CommonWebPages(
+                      url:newsItem['link'],
+                      title: newsItem['title'],
+                      )
+                  ));
+                },
+                child: Card(
+                    child:Container(
+                      child:Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: Container(
+                                  padding: EdgeInsets.only(left: 5.0,right: 5.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(newsItem['title']),
+                                      Container(
+                                        margin: EdgeInsets.only(top: 15.0),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(child: Text(
+                                              "来源：${newsItem['source']}",
+                                              style: TextStyle(
+                                                  color: Colors.deepOrange
+                                              ),
+                                            ),)
 
-                                  ],
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  )
+                              )
+                          ),
+                          ClipRRect(
+                              borderRadius: BorderRadius.only(topRight:Radius.circular(4.0),bottomRight: Radius.circular(4.0)),
+                              child:SizedBox(
+                                width: 150.0,
+                                height: 100.0,
+                                child: Image.network(newsItem['picInfo'].length>0?newsItem['picInfo'][0]['url']:'http://img5.mtime.cn/mt/2018/10/10/112514.30587089_180X260X4.jpg',
+                                  fit: BoxFit.cover,
                                 ),
                               )
-                            ],
                           )
-                      )
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(topRight:Radius.circular(4.0),bottomRight: Radius.circular(4.0)),
-                        child:SizedBox(
-                          width: 150.0,
-                          height: 100.0,
-                          child: Image.network(newsItem['picInfo'].length>0?newsItem['picInfo'][0]['url']:'http://img5.mtime.cn/mt/2018/10/10/112514.30587089_180X260X4.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      )
-                    ],
-                  ) ,
-                )
+                        ],
+                      ) ,
+                    )
+                ),
               );
+                
+
 
     }
 

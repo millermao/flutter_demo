@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:ui';
 
 
 class Moviedes extends StatefulWidget{
@@ -52,6 +53,7 @@ class _Moviestate extends State<Moviedes> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        elevation:0,
         title: Text('${title}'),
         centerTitle: true,
       ),
@@ -80,12 +82,14 @@ class _Moviestate extends State<Moviedes> {
             ),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.03),
+                  Colors.white.withOpacity(0.2),
                 BlendMode.dstATop
             )
         )
       ),
-      child: ListView(
+      child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 15.0,sigmaY: 10.0),
+          child: ListView(
         children: <Widget>[
           Container(
             margin:EdgeInsets.only(bottom: 20,top: 15),
@@ -219,7 +223,8 @@ class _Moviestate extends State<Moviedes> {
           )
 
         ],
-      ),
+      )
+      )
     );
 
   }

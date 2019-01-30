@@ -26,6 +26,7 @@ class _MyHomeAppState extends State<AssistPage>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        elevation:0,
         title: Text(title),
         centerTitle: true,
       ),
